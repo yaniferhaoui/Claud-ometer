@@ -32,6 +32,11 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   const totalCost = sessions.reduce((sum, s) => sum + pickCost(s.estimatedCosts, s.estimatedCost), 0);
   const totalToolCalls = sessions.reduce((sum, s) => sum + s.toolCallCount, 0);
 
+  const currentMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
+  const thisMonthCost = sessions
+    .filter(s => s.timestamp.startsWith(currentMonth))
+    .reduce((sum, s) => sum + pickCost(s.estimatedCosts, s.estimatedCost), 0);
+
   // Aggregate tool usage across sessions
   const toolUsage: Record<string, number> = {};
   sessions.forEach(s => {
@@ -58,7 +63,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-5 gap-4">
         <Card className="border-border/50 shadow-sm">
           <CardContent className="p-4 text-center">
             <p className="text-2xl font-bold">{sessions.length}</p>
@@ -81,6 +86,12 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           <CardContent className="p-4 text-center">
             <p className="text-2xl font-bold">{formatCost(totalCost)}</p>
             <p className="text-xs text-muted-foreground">Est. Usage</p>
+          </CardContent>
+        </Card>
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="p-4 text-center">
+            <p className="text-2xl font-bold">{formatCost(thisMonthCost)}</p>
+            <p className="text-xs text-muted-foreground">This Month</p>
           </CardContent>
         </Card>
       </div>

@@ -816,12 +816,22 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 
   const finalCosts = projectTotalCosts.api > 0 ? projectTotalCosts : totalEstimatedCosts;
 
+  // Compute current-month cost by summing daily model costs for the current calendar month
+  const currentMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
+  const thisMonthCosts = mergedDailyModelTokens
+    .filter(d => d.date.startsWith(currentMonth))
+    .reduce((sum, d) => {
+      const dayCosts = d.costsByModel || {};
+      return addCosts(sum, Object.values(dayCosts).reduce((s, c) => addCosts(s, c), zeroCosts()));
+    }, zeroCosts());
+
   return {
     totalSessions: (stats?.totalSessions || 0) + supplemental.totalSessions,
     totalMessages: (stats?.totalMessages || 0) + supplemental.totalMessages,
     totalTokens: projectTotalTokens || totalTokens,
     estimatedCost: finalCosts[DEFAULT_COST_MODE],
     estimatedCosts: finalCosts,
+    thisMonthCosts,
     dailyActivity: mergedDailyActivity,
     dailyModelTokens: mergedDailyModelTokens,
     modelUsage: modelUsageWithCost,
