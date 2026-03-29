@@ -173,6 +173,7 @@ export interface DashboardStats {
   totalTokens: number;
   estimatedCost: number;
   estimatedCosts: CostEstimates;
+  thisMonthCosts: CostEstimates;
   dailyActivity: DailyActivity[];
   dailyModelTokens: DailyModelTokens[];
   modelUsage: Record<string, ModelUsage & { estimatedCost: number; estimatedCosts: CostEstimates }>;

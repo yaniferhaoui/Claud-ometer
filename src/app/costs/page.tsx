@@ -55,6 +55,7 @@ export default function CostsPage() {
   });
 
   const totalCost = pickCost(stats.estimatedCosts, stats.estimatedCost);
+  const thisMonthCost = pickCost(stats.thisMonthCosts);
 
   // Cost by project
   const projectCosts = projects
@@ -104,10 +105,16 @@ export default function CostsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-5 gap-4">
         <StatCard
           title="Estimated Usage"
           value={formatCost(totalCost)}
+          subtitle={modeLabel.name.toLowerCase() + ' estimate'}
+          icon={Coins}
+        />
+        <StatCard
+          title="This Month"
+          value={formatCost(thisMonthCost)}
           subtitle={modeLabel.name.toLowerCase() + ' estimate'}
           icon={Coins}
         />

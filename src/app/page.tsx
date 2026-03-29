@@ -47,7 +47,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Hero Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-5 gap-4">
         <StatCard
           title="Total Sessions"
           value={stats.totalSessions.toLocaleString()}
@@ -67,6 +67,12 @@ export default function DashboardPage() {
         <StatCard
           title="Estimated Usage"
           value={formatCost(pickCost(stats.estimatedCosts, stats.estimatedCost))}
+          subtitle={modeLabel.name.toLowerCase() + ' estimate'}
+          icon={Coins}
+        />
+        <StatCard
+          title="This Month"
+          value={formatCost(pickCost(stats.thisMonthCosts))}
           subtitle={modeLabel.name.toLowerCase() + ' estimate'}
           icon={Coins}
         />
